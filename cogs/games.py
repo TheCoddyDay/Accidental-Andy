@@ -1,8 +1,8 @@
-from libs import client, macro
-import asyncio
-from discord.ext import commands
 import random
 import aiohttp
+import asyncio
+from discord.ext import commands
+from libs import client, macro
 
 
 class Games(commands.Cog):
@@ -11,7 +11,7 @@ class Games(commands.Cog):
         self.client = client.Client()
 
     @commands.command(name='coinflip', aliases=['cf', 'coin'])
-    #@commands.cooldown(1, 8)
+    @commands.cooldown(1, 8)
     async def coinflip(self, ctx, bet, side: str):
         assert not type(
             bet) == int, "You likely put the arguments in the wrong order! It should be something like ``p!coin 1 tails``!"
@@ -42,7 +42,7 @@ class Games(commands.Cog):
                 footer=ctx.message.author, icon=ctx.message.author.avatar_url))
 
     @commands.command(name='dice', aliases=['die'])
-    #@commands.cooldown(1, 8)
+    @commands.cooldown(1, 8)
     async def dice(self, ctx, bet, side: int):
         assert type(
             bet) == str, 'You likely put the arguments in the wrong order! It should be something like ``p!dice ' \
@@ -80,7 +80,7 @@ class Games(commands.Cog):
             print(yes[int(false_side) - 1])
 
     @commands.command(name='roulette')
-    #@commands.cooldown(1, 8)
+    @commands.cooldown(1, 8)
     async def roulette(self, ctx, bet):
         temp = await self.client.get_value(ctx.message.author.id)
         current = temp[0][1]
@@ -110,7 +110,7 @@ class Games(commands.Cog):
             ))
 
     @commands.command(name='slots')
-    #@commands.cooldown(1, 8)
+    @commands.cooldown(1, 8)
     async def slots(self, ctx, bet):
         temp = await self.client.get_value(ctx.message.author.id)
         current = temp[0][1]
@@ -214,7 +214,5 @@ class Games(commands.Cog):
                 thumb='http://www.blocksandgold.com//media/catalog/product/cache/3/image/200x/6cffa5908a86143a54dc6ad9b8a7c38e/a/r/arbuste_mort_1.png',
                 icon=ctx.message.author.avatar_url,
                 footer=f"{ctx.message.author} Your chances of winning were {round(100/bet, 2)}%!"))
-
-
 def setup(bot: commands.Bot):
     bot.add_cog(Games(bot))

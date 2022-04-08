@@ -1,7 +1,8 @@
-from discord.ext import commands
 import discord
+import json
+import requests
+from discord.ext import commands
 from libs import macro
-
 
 class Cogs:
     safe = [
@@ -12,15 +13,28 @@ class Cogs:
     ]
 
 
-bot = commands.Bot(command_prefix='p!')
+with open("env/configuration.json", 'r') as config:
+    data = json.load(config)
+    Token = data['Token']
+    Prefix = data['Prefix']
+
+
+bot = commands.Bot(command_prefix=commands.when_mentioned_or(Prefix))
 bot.remove_command('help')
 
 for cog in Cogs.safe:
     bot.load_extension(cog)
 
-
     def __init__(self, bot):
         self.bot = bot
+
+
+@bot.event
+async def on_ready():
+    print('Connected to Hydra: {}'.format(bot.user.name))
+    print('Hydra ID: {}'.format(bot.user.id))
+    print(f"""READY\nUSER:{bot.user}\nminorities destroyed :sunglasses:""")
+    await bot.change_presence(activity=discord.Game(name=f'{Prefix}help || Usef {Prefix}create to start an account!'), status=discord.Status.idle)
 
 
 @bot.event
@@ -53,12 +67,17 @@ async def on_command_error(ctx, error):
         await ctx.send(embed=await macro.error(f'Woah there partner. :cowboy: It seems as though you ran into a serious error. \nPlease contact @tedell#0001 and DM him the text below, along with the command you used, and how you typed it out.\n```{str(error)}```'))
 
 
+@bot.command(aliases=['ch',])
+async def chat_bot(ctx, uid,*, args):
+    msg = args.lower()
+    path_ = requests.get(f'http://api.brainshop.ai/get?bid=158213&key=bjwuUPizXKlLSLml&uid={uid}&msg={msg}')
+    path_dic = path_.json()
+    chat_send = path_dic['cnt']
+    
+    if len(args) == 0:
+        await ctx.reply('Please specify something for making conversation with me...')
+    
+    if len(args) >= 1:
+        await ctx.reply(chat_send)
 
-
-@bot.event
-async def on_ready():
-    print(f"""READY\nUSER:{bot.user}\nminorities destroyed :sunglasses:""")
-    await bot.change_presence(activity=discord.Game(name='p!help || Use p!create to start an account!'), status=discord.Status.idle)
-
-
-bot.run('')
+bot.run(Token)
