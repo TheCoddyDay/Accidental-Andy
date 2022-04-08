@@ -68,7 +68,8 @@ async def on_command_error(ctx, error):
 
 
 @bot.command(aliases=['ch',])
-async def chat_bot(ctx, uid,*, args):
+async def chat_bot(ctx, uid, name, *, args):
+    name:str = None
     msg = args.lower()
     path_ = requests.get(f'http://api.brainshop.ai/get?bid=158213&key=bjwuUPizXKlLSLml&uid={uid}&msg={msg}')
     path_dic = path_.json()

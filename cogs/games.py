@@ -9,6 +9,8 @@ class Games(commands.Cog):
     def __init__(self, bot: commands.Bot):
         self.bot = bot
         self.client = client.Client()
+        self.wins:list = None
+        self.lose:list = None
 
     @commands.command(name='coinflip', aliases=['cf', 'coin'])
     @commands.cooldown(1, 8)

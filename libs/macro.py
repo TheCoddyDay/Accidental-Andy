@@ -2,7 +2,7 @@ import discord
 import datetime
 
 class Macro:
-    """the BEST macro class :D"""
+    """the BEST macro class :D Its works"""
 
     @staticmethod
     async def msg(desc=None, title=None, color: discord.Color = discord.Color.random(), thumb: str = None,
