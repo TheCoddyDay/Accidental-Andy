@@ -17,7 +17,8 @@ with open("env/configuration.json", 'r') as config:
     data = json.load(config)
     Token = data['Token']
     Prefix = data['Prefix']
-
+    bid = data['bid']
+    key = data['key']
 
 bot = commands.Bot(command_prefix=commands.when_mentioned_or(Prefix))
 bot.remove_command('help')
@@ -70,7 +71,7 @@ async def on_command_error(ctx, error):
 @bot.command(aliases=['ch',])
 async def chat_bot(ctx, uid, *, args):
     msg = args.lower()
-    path_ = requests.get(f'http://api.brainshop.ai/get?bid=158213&key=bjwuUPizXKlLSLml&uid={uid}&msg={msg}')
+    path_ = requests.get(f'http://api.brainshop.ai/get?bid={bid}&key={key}&uid={uid}&msg={msg}')
     path_dic = path_.json()
     chat_send = path_dic['cnt']
     if len(args) == 0:
