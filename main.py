@@ -64,17 +64,15 @@ async def on_command_error(ctx, error):
     elif isinstance(error, commands.errors.MissingRequiredArgument):
         await ctx.send(embed=await macro.error(f"You forgot an argument!\n```{error}```"))
     else:
-        await ctx.send(embed=await macro.error(f'Woah there partner. :cowboy: It seems as though you ran into a serious error. \nPlease contact @tedell#0001 and DM him the text below, along with the command you used, and how you typed it out.\n```{str(error)}```'))
+        await ctx.send(embed=await macro.error(f'Woah there partner. :cowboy: It seems as though you ran into a serious error. \nPlease contact @TheCoddyDay#5100 and DM him the text below, along with the command you used, and how you typed it out.\n```{str(error)}```'))
 
 
 @bot.command(aliases=['ch',])
-async def chat_bot(ctx, uid, name, *, args):
-    name:str = None
+async def chat_bot(ctx, uid, *, args):
     msg = args.lower()
     path_ = requests.get(f'http://api.brainshop.ai/get?bid=158213&key=bjwuUPizXKlLSLml&uid={uid}&msg={msg}')
     path_dic = path_.json()
     chat_send = path_dic['cnt']
-    
     if len(args) == 0:
         await ctx.reply('Please specify something for making conversation with me...')
     
